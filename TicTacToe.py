@@ -54,12 +54,6 @@ class TicTacToe:
 
     # Best kind of checks are if statements, no one uses paper anymore...
     def check_for_win(self):
-        if self.SPACES_LEFT == 0:
-            self.GAME_STATE = self.STATES.DRAW
-            print("DRAW!")
-            self.draw_board()
-            sys.exit(1)
-
         # Horizontal
         if (self.board[1][1] == self.board[1][2] == self.board[1][3] != ' ' or
             self.board[2][1] == self.board[2][2] == self.board[2][3] != ' ' or
@@ -75,7 +69,13 @@ class TicTacToe:
               self.board[1][3] == self.board[2][2] == self.board[3][1] != ' '):
             pass
         else:
-            return
+            # Needs to be after all other calls to prevent accidently calling a last move win a draw
+            if self.SPACES_LEFT == 0:
+                self.draw_board()
+                self.GAME_STATE = self.STATES.DRAW
+                print("DRAW!")
+                sys.exit(1)
+            return False
         
         print("WINNER WINNER CHICKEN DINNER!")
         if self.GAME_STATE == self.STATES.CROSS_TURN:
@@ -98,10 +98,10 @@ class TicTacToe:
         column = int(column)
         if symbol != "X" and symbol != "O":
             print("This is Tic-Tac-Toe! Ya know, with X's and O's! Not X's and " + symbol + "'s...")
-            return
+            return False
         if row > 3 or column > 3:
             print("Invalid input! You cannot assign a marker to a number outside the grid dummy! Enter numbers between 1 and 3 (inclusive)")
-            return
+            return False
 
         # Check that it is actually that symbols turn
         # This if/else could most likely be made simpler but this works
@@ -110,16 +110,17 @@ class TicTacToe:
         else:
             print("Hey! It's not your turn!")
             self.draw_board()
-            return
+            return False
 
         # Check coordinate for existing occupancy
         if self.board[row][column] != ' ':
             print('Spot already occupied! Are you trying to cheat?')
             self.draw_board()
-            return
+            return False
         
         # Set the requested symbol at the requested coordinate 
         self.board[row][column] = symbol
+        self.SPACES_LEFT -= 1
         
         self.check_for_win()
         
@@ -128,17 +129,16 @@ class TicTacToe:
             self.GAME_STATE = self.STATES.NAUGHT_TURN
         else:
             self.GAME_STATE = self.STATES.CROSS_TURN
-        self.SPACES_LEFT -=1
 
         # Redraw the board
         self.draw_board()
+        return True
 
     # Prompt for input for faster playing
     def play(self):
         while (self.GAME_STATE < 2):
             row = input("Row: ")
             # Secret double input... sssshhhhhhh
-            print(len(row))
             if len(row) == 2: # Not working...
                 print("R: " + str(row[0]))
                 print("C: " + str(row[1]))
