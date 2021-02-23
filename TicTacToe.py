@@ -139,11 +139,10 @@ class TicTacToe:
         while (self.GAME_STATE < 2):
             row = input("Row: ")
             # Secret double input... sssshhhhhhh
-            if len(row) == 2: # Not working...
-                print("R: " + str(row[0]))
-                print("C: " + str(row[1]))
-                row = row[0]
-                column = row[1]
+            if len(row) == 2:
+                source = row
+                row = source[0]
+                column = source[1]
             else:
                 column = input("Column: ")
                 
