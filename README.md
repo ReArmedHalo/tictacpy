@@ -2,12 +2,14 @@
 
 ```bash
 git clone git@github.com:ReArmedHalo/tictacpy.git
+cd tictacpy
 python
 ```
 
 Inside your python shell:
 
 ```python
+from TicTacToe import TicTacToe
 ttt = TicTacToe()
 
 # To place a marker manually
