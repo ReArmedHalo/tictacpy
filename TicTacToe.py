@@ -21,21 +21,28 @@ class TicTacToe:
         board = self.board
 
         print("\n=====\n")
-        # Draw board
+        # Draw board - I went this way in the thought of making the board size configurable
+        # More changes would've been needed to make this work properly
+        # But this works just as well as printing the board directly so I left it as such
         for i in board:
             for c in board[i]:
+                # Is this the last cell of the row? Don't print the line
                 if list(board[i].keys()).index(c) == 2:
                     print(board[i][c])
                 else:
+                    # We need the line
                     print(board[i][c], end='|')
+            # Have we printed the last row yet?
             if list(board.keys()).index(i) < 2:
                 print('-+-+-')
 
+        # Let the player know who's turn it is
         if self.GAME_STATE == self.STATES.CROSS_TURN:
             print("\nIt is X's turn!")
         else:
             print("\nIt is O's turn!")
         
+        # Kept so we never forget our roots
         #print(board[1][1] + '|' + board[1][2] + '|' + board[1][3])
         #print('-+-+-')
         #print(board[2][1] + '|' + board[2][2] + '|' + board[2][3])
@@ -45,7 +52,10 @@ class TicTacToe:
     # Init
     def __init__(self):
         print('Starting Tic-Tac-Toe...')
+        # Randomize who starts
         self.GAME_STATE = round(random.uniform(0, 1), 0)
+        
+        # Assign board and draw it
         self.board = {1: {1: ' ', 2: ' ', 3: ' '},
                       2: {1: ' ', 2: ' ', 3: ' '},
                       3: {1: ' ', 2: ' ', 3: ' '}
@@ -69,7 +79,7 @@ class TicTacToe:
               self.board[1][3] == self.board[2][2] == self.board[3][1] != ' '):
             pass
         else:
-            # Needs to be after all other calls to prevent accidently calling a last move win a draw
+            # Needs to be after all other calls to prevent accidentally calling a last move win a draw
             if self.SPACES_LEFT == 0:
                 self.draw_board()
                 self.GAME_STATE = self.STATES.DRAW
@@ -77,6 +87,7 @@ class TicTacToe:
                 sys.exit(1)
             return False
         
+        # If you can execute this, [your too close] we have a winner!
         print("WINNER WINNER CHICKEN DINNER!")
         if self.GAME_STATE == self.STATES.CROSS_TURN:
             self.draw_board()
@@ -89,9 +100,9 @@ class TicTacToe:
         sys.exit(0)
         
     def place_marker(self, symbol, row, column):
-        # Covnert input to the format we desire
+        # Convert input to the format we desire
         # - Capitalize symbol
-        # - Interize row and column
+        # - Int-erize row and column
         # Ensure we were given valid input
         symbol = symbol.capitalize()
         row = int(row)
